@@ -2,17 +2,26 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { AIAnalysisResult } from "../types";
 
-export const analyzePhoto = async (base64Image: string): Promise<AIAnalysisResult> => {
-  // In a browser environment without a bundler, we must safely check for process.env
-  // Netlify provides these via a special injection or we fall back to an empty string
-  let apiKey = "";
+/**
+ * Safely retrieves the API Key without crashing the browser.
+ * In Netlify/ESM environments, process.env is not globally available.
+ */
+const getSafeApiKey = (): string => {
   try {
+    // Attempt to check if process exists, otherwise return empty
+    // @ts-ignore
     if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
-      apiKey = process.env.API_KEY;
+      // @ts-ignore
+      return process.env.API_KEY;
     }
   } catch (e) {
-    console.warn("Could not access process.env.API_KEY directly.");
+    // Silent catch
   }
+  return "";
+};
+
+export const analyzePhoto = async (base64Image: string): Promise<AIAnalysisResult> => {
+  const apiKey = getSafeApiKey();
 
   if (!apiKey) {
     console.warn("Gemini API Key is missing. AI features will use fallback metadata.");
