@@ -3,14 +3,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
-const initApp = () => {
-  try {
-    const rootElement = document.getElementById('root');
-    if (!rootElement) {
-      console.error("Could not find root element to mount to");
-      return;
-    }
+const rootElement = document.getElementById('root');
 
+if (rootElement) {
+  try {
     const root = ReactDOM.createRoot(rootElement);
     root.render(
       <React.StrictMode>
@@ -18,20 +14,16 @@ const initApp = () => {
       </React.StrictMode>
     );
   } catch (error) {
-    console.error("Application failed to start:", error);
-    const rootElement = document.getElementById('root');
-    if (rootElement) {
-      rootElement.innerHTML = `<div style="padding: 40px; text-align: center; font-family: serif;">
-        <h2>The gallery is currently resting.</h2>
-        <p>Please check the console for details or refresh the page.</p>
-      </div>`;
-    }
+    console.error("Mounting Error:", error);
+    rootElement.innerHTML = `
+      <div style="height: 100vh; display: flex; align-items: center; justify-content: center; font-family: serif; text-align: center;">
+        <div>
+          <h2 style="font-weight: normal; font-size: 24px;">The gallery is temporarily unavailable.</h2>
+          <p style="color: #999; font-size: 12px; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.1em;">Error: Unable to initialize view</p>
+        </div>
+      </div>
+    `;
   }
-};
-
-// Ensure DOM is fully loaded before mounting
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initApp);
 } else {
-  initApp();
+  console.error("Critical Error: #root element not found in DOM.");
 }
