@@ -17,22 +17,34 @@ const App: React.FC = () => {
   const [photos, setPhotos] = useState<Photo[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.length > 0) return parsed;
+      }
     } catch (e) { console.error(e); }
+    
+    // Premium Initial Samples
     return [
       { id: 'p1', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200', title: 'Velvet Silence', category: 'Portrait', description: 'Shadow play on silk.', isPublished: true, isCategoryHero: false, layoutType: 'classic' },
       { id: 'p2', url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1200', title: 'The Architect', category: 'Portrait', description: 'Lines of character.', isPublished: true, isCategoryHero: false, layoutType: 'editorial' },
-      { id: 'w1', url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1200', title: 'Eternal Gold', category: 'Pre-wed', description: 'Sunset vows.', isPublished: true, isCategoryHero: false, layoutType: 'wide' }
+      { id: 'w1', url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1200', title: 'Eternal Gold', category: 'Pre-wed', description: 'Sunset vows.', isPublished: true, isCategoryHero: false, layoutType: 'wide' },
+      { id: 'p3', url: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200', title: 'Golden Hour', category: 'Pre-wed', description: 'Warmth and whispers.', isPublished: true, isCategoryHero: false, layoutType: 'classic' },
+      { id: 'k1', url: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=1200', title: 'Pure Joy', category: 'Kids', description: 'Unfiltered laughter.', isPublished: true, isCategoryHero: false, layoutType: 'classic' }
     ];
   });
 
   const [homeHeroes, setHomeHeroes] = useState<Photo[]>(() => {
     try {
       const saved = localStorage.getItem(HERO_STORAGE_KEY);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.length > 0) return parsed;
+      }
     } catch (e) { console.error(e); }
+    
     return [
-      { id: 'h1', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200', title: 'Human Stories', category: 'Portrait', description: 'Enter the Portrait Archive', isPublished: true, isCategoryHero: true, layoutType: 'editorial' }
+      { id: 'h1', url: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1200', title: 'The Human Canvas', category: 'Portrait', description: 'Deep character studies.', isPublished: true, isCategoryHero: true, layoutType: 'editorial' },
+      { id: 'h2', url: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200', title: 'Timeless Unions', category: 'Pre-wed', description: 'Cinematic wedding tales.', isPublished: true, isCategoryHero: true, layoutType: 'editorial' }
     ];
   });
 
@@ -92,16 +104,16 @@ const App: React.FC = () => {
             <div>
               <h4 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-neutral-900">Navigation</h4>
               <ul className="text-xs text-neutral-400 space-y-4 uppercase tracking-[0.2em]">
-                <li><button onClick={() => setView(ViewMode.SHOWCASE)} className="hover:text-amber-600">The Work</button></li>
-                <li><button onClick={() => setView(ViewMode.ABOUT)} className="hover:text-amber-600">The Story</button></li>
-                <li><button onClick={() => setView(ViewMode.CONTACT)} className="hover:text-amber-600">Connect</button></li>
+                <li><button onClick={() => setView(ViewMode.SHOWCASE)} className="hover:text-amber-600 transition-colors">The Work</button></li>
+                <li><button onClick={() => setView(ViewMode.ABOUT)} className="hover:text-amber-600 transition-colors">The Story</button></li>
+                <li><button onClick={() => setView(ViewMode.CONTACT)} className="hover:text-amber-600 transition-colors">Connect</button></li>
               </ul>
             </div>
             <div>
               <h4 className="text-[10px] uppercase tracking-widest font-bold mb-6 text-neutral-900">Social</h4>
               <ul className="text-xs text-neutral-400 space-y-4 uppercase tracking-[0.2em]">
-                <li><a href="https://instagram.com/potraits_plaza" target="_blank" className="hover:text-amber-600">Instagram</a></li>
-                <li><a href="mailto:potraitsplaza@gmail.com" className="hover:text-amber-600">Email</a></li>
+                <li><a href="https://instagram.com/potraits_plaza" target="_blank" className="hover:text-amber-600 transition-colors">Instagram</a></li>
+                <li><a href="mailto:potraitsplaza@gmail.com" className="hover:text-amber-600 transition-colors">Email</a></li>
               </ul>
             </div>
           </div>

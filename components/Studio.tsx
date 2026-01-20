@@ -42,10 +42,11 @@ const Studio: React.FC<StudioProps> = ({ photos, onPhotosChange, homeHeroes, onH
     setIsUploading(true);
     setUploadProgress({ current: 0, total: files.length });
     const newItems: Photo[] = [];
+    
     for (let i = 0; i < files.length; i++) {
-      const reader = new FileReader();
       const file = files[i];
       const processed = await new Promise<Photo | null>((resolve) => {
+        const reader = new FileReader();
         reader.onload = async (event) => {
           const base64 = event.target?.result as string;
           try {
@@ -56,29 +57,47 @@ const Studio: React.FC<StudioProps> = ({ photos, onPhotosChange, homeHeroes, onH
               title: analysis.title,
               category: analysis.category,
               description: analysis.description,
-              isPublished: false,
+              isPublished: true, // Auto-publish for convenience, can be toggled
               isCategoryHero: activeTab === 'heroes',
               layoutType: 'classic'
             });
-          } catch { resolve(null); }
+          } catch { 
+            resolve({
+              id: Math.random().toString(36).substr(2, 9),
+              url: base64, 
+              title: "Untitiled Composition",
+              category: "General",
+              description: "A moment captured.",
+              isPublished: true,
+              isCategoryHero: activeTab === 'heroes',
+              layoutType: 'classic'
+            }); 
+          }
         };
         reader.readAsDataURL(file);
       });
       if (processed) newItems.push(processed);
       setUploadProgress(prev => ({ ...prev, current: i + 1 }));
     }
+    
     if (activeTab === 'gallery') onPhotosChange([...photos, ...newItems]);
     else onHomeHeroesChange([...homeHeroes, ...newItems]);
     setIsUploading(false);
   };
 
-  const moveItem = (id: string, direction: 'up' | 'down', list: Photo[], updateFn: (l: Photo[]) => void) => {
+  const togglePublish = (id: string) => {
+    const list = activeTab === 'gallery' ? photos : homeHeroes;
+    const updated = list.map(p => p.id === id ? { ...p, isPublished: !p.isPublished } : p);
+    activeTab === 'gallery' ? onPhotosChange(updated) : onHomeHeroesChange(updated);
+  };
+
+  const moveItem = (id: string, direction: 'up' | 'down') => {
+    const list = [...(activeTab === 'gallery' ? photos : homeHeroes)];
     const index = list.findIndex(p => p.id === id);
     const target = direction === 'up' ? index - 1 : index + 1;
     if (target < 0 || target >= list.length) return;
-    const next = [...list];
-    [next[index], next[target]] = [next[target], next[index]];
-    updateFn(next);
+    [list[index], list[target]] = [list[target], list[index]];
+    activeTab === 'gallery' ? onPhotosChange(list) : onHomeHeroesChange(list);
   };
 
   if (!isAuthenticated) {
@@ -115,12 +134,12 @@ const Studio: React.FC<StudioProps> = ({ photos, onPhotosChange, homeHeroes, onH
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 pt-40 pb-32">
+    <div className="max-w-7xl mx-auto px-6 pt-40 pb-32 animate-fadeIn">
       <div className="flex flex-col lg:flex-row justify-between items-end gap-12 border-b border-neutral-100 pb-16 mb-12">
         <div>
           <h2 className="font-serif text-5xl mb-4 text-neutral-900 tracking-tighter">Studio Management</h2>
           <p className="text-neutral-400 text-[10px] tracking-[0.6em] uppercase font-bold">
-            {isUploading ? `Processing ${uploadProgress.current}/${uploadProgress.total}...` : 'Curate your vision'}
+            {isUploading ? `AI Processing ${uploadProgress.current}/${uploadProgress.total}...` : 'Curate your vision'}
           </p>
         </div>
         <div className="flex flex-wrap gap-4 justify-end">
@@ -146,8 +165,13 @@ const Studio: React.FC<StudioProps> = ({ photos, onPhotosChange, homeHeroes, onH
       <div className="space-y-4 mb-20">
         {(activeTab === 'gallery' ? photos : homeHeroes).map((p, idx) => (
            <div key={p.id} className="bg-white border border-neutral-100 p-6 flex flex-wrap items-center gap-8 group hover:border-amber-600/30 transition-all duration-500">
-            <div className="w-24 h-24 overflow-hidden rounded-sm bg-neutral-50 flex-shrink-0">
+            <div className="w-24 h-24 overflow-hidden rounded-sm bg-neutral-50 flex-shrink-0 relative">
                <img src={p.url} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+               {!p.isPublished && (
+                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <span className="text-[8px] text-white uppercase tracking-widest font-bold bg-red-600 px-2">Draft</span>
+                 </div>
+               )}
             </div>
             <div className="flex-grow">
               <div className="flex items-center gap-3 mb-1">
@@ -159,13 +183,21 @@ const Studio: React.FC<StudioProps> = ({ photos, onPhotosChange, homeHeroes, onH
             </div>
             <div className="flex items-center gap-4 border-l border-neutral-100 pl-8">
               <div className="flex flex-col gap-2">
-                <button onClick={() => moveItem(p.id, 'up', (activeTab === 'gallery' ? photos : homeHeroes), (activeTab === 'gallery' ? onPhotosChange : onHomeHeroesChange))} className="p-2 hover:bg-neutral-50 text-neutral-400 hover:text-black transition-colors">
+                <button onClick={() => moveItem(p.id, 'up')} className="p-2 hover:bg-neutral-50 text-neutral-400 hover:text-black transition-colors">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="18 15 12 9 6 15"/></svg>
                 </button>
-                <button onClick={() => moveItem(p.id, 'down', (activeTab === 'gallery' ? photos : homeHeroes), (activeTab === 'gallery' ? onPhotosChange : onHomeHeroesChange))} className="p-2 hover:bg-neutral-50 text-neutral-400 hover:text-black transition-colors">
+                <button onClick={() => moveItem(p.id, 'down')} className="p-2 hover:bg-neutral-50 text-neutral-400 hover:text-black transition-colors">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
               </div>
+              
+              <button 
+                onClick={() => togglePublish(p.id)}
+                className={`px-4 py-2 text-[9px] uppercase tracking-widest font-bold border transition-all ${p.isPublished ? 'bg-neutral-50 text-neutral-400 border-neutral-100 hover:bg-red-50 hover:text-red-500' : 'bg-black text-white border-black hover:bg-neutral-800'}`}
+              >
+                {p.isPublished ? 'Unpublish' : 'Publish'}
+              </button>
+
               <button 
                 onClick={() => {
                   const confirmed = confirm(`Are you sure you want to remove "${p.title}"?`);
@@ -175,7 +207,7 @@ const Studio: React.FC<StudioProps> = ({ photos, onPhotosChange, homeHeroes, onH
                       : onHomeHeroesChange(homeHeroes.filter(x => x.id !== p.id));
                   }
                 }} 
-                className="p-4 text-neutral-200 hover:text-red-500 hover:bg-red-50 transition-all rounded-sm ml-4"
+                className="p-4 text-neutral-200 hover:text-red-500 hover:bg-red-50 transition-all rounded-sm"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
               </button>
@@ -183,8 +215,9 @@ const Studio: React.FC<StudioProps> = ({ photos, onPhotosChange, homeHeroes, onH
           </div>
         ))}
         {(activeTab === 'gallery' ? photos : homeHeroes).length === 0 && (
-          <div className="py-32 text-center border-2 border-dashed border-neutral-100 rounded-sm">
+          <div className="py-32 text-center border-2 border-dashed border-neutral-100 rounded-sm bg-neutral-50/50">
             <p className="text-neutral-300 text-[10px] uppercase tracking-[0.5em] font-bold">No assets found in this collection</p>
+            <p className="text-neutral-400 text-[9px] mt-4">Upload high-resolution images to begin your showcase</p>
           </div>
         )}
       </div>

@@ -15,6 +15,7 @@ const Showcase: React.FC<ShowcaseProps> = ({ photos, homeHeroes }) => {
   const publishedHeroes = useMemo(() => homeHeroes.filter(p => p.isPublished), [homeHeroes]);
   
   const categories = useMemo(() => {
+    // Collect all unique categories from published photos
     const cats = new Set(publishedPhotos.map(p => p.category));
     return ['Overview', ...Array.from(cats).sort()];
   }, [publishedPhotos]);
@@ -84,7 +85,7 @@ const Showcase: React.FC<ShowcaseProps> = ({ photos, homeHeroes }) => {
         <div className="absolute inset-0 z-0">
           <img 
             src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2400&auto=format&fit=crop" 
-            className="w-full h-full object-cover opacity-25 scale-105"
+            className="w-full h-full object-cover opacity-25 scale-105 transition-transform duration-[10s] hover:scale-110"
             alt="Hero Background"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black"></div>
@@ -101,7 +102,10 @@ const Showcase: React.FC<ShowcaseProps> = ({ photos, homeHeroes }) => {
           </h1>
           <div className="flex flex-col items-center">
             <button 
-              onClick={() => changeCategory('Overview')}
+              onClick={() => {
+                const gallery = document.getElementById('gallery-root');
+                gallery?.scrollIntoView({ behavior: 'smooth' });
+              }}
               className="w-12 h-32 flex items-center justify-center group"
             >
               <div className="w-[1px] h-full bg-gradient-to-b from-amber-600 to-transparent group-hover:from-white transition-all duration-1000"></div>
@@ -134,7 +138,7 @@ const Showcase: React.FC<ShowcaseProps> = ({ photos, homeHeroes }) => {
                 <span className="text-[10px] uppercase tracking-[1.2em] text-amber-600 font-bold block mb-8">
                   {activeCategory === 'Overview' ? 'The Collection' : 'Archive Gallery'}
                 </span>
-                <h2 className="font-serif text-6xl md:text-9xl mb-12 tracking-tighter leading-none">
+                <h2 className="font-serif text-6xl md:text-9xl mb-12 tracking-tighter leading-none uppercase">
                   {activeCategory === 'Overview' ? 'Masterpieces' : activeCategory}
                 </h2>
                 <div className="w-20 h-[1.5px] bg-neutral-900 mx-auto mb-12"></div>
@@ -197,6 +201,11 @@ const Showcase: React.FC<ShowcaseProps> = ({ photos, homeHeroes }) => {
             );
           })}
         </div>
+        {filteredPhotos.length === 0 && (
+          <div className="py-40 text-center">
+             <p className="text-neutral-300 text-[10px] uppercase tracking-[0.5em] font-bold">The Archive is currently empty for this category</p>
+          </div>
+        )}
       </div>
 
       {/* Focused Lightbox */}
@@ -207,7 +216,7 @@ const Showcase: React.FC<ShowcaseProps> = ({ photos, homeHeroes }) => {
         >
           <div className="fixed top-0 left-0 right-0 h-40 flex items-center justify-between px-16 pointer-events-none">
             <span className="text-[10px] text-white/30 uppercase tracking-[1.2em] pointer-events-auto select-none">
-              {activeCategory} Archive / 0{selectedPhotoIndex + 1}
+              {activeCategory} Archive / {selectedPhotoIndex + 1}
             </span>
             <button 
               onClick={() => setSelectedPhotoIndex(null)}
@@ -252,7 +261,7 @@ const Showcase: React.FC<ShowcaseProps> = ({ photos, homeHeroes }) => {
               <div className="w-1.5 h-1.5 rounded-full bg-white/20"></div>
               <span className="text-[11px] uppercase tracking-[0.8em] text-white/40">{selectedPhotoIndex + 1} OF {filteredPhotos.length}</span>
             </div>
-            <h2 className="font-serif text-6xl mb-8 tracking-tighter leading-none">{currentPhoto.title}</h2>
+            <h2 className="font-serif text-6xl mb-8 tracking-tighter leading-none uppercase">{currentPhoto.title}</h2>
             <p className="text-[13px] text-white/20 leading-loose uppercase tracking-[0.6em] italic max-w-2xl mx-auto">{currentPhoto.description}</p>
           </div>
         </div>
