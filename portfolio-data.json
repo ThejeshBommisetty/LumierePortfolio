@@ -1,0 +1,213 @@
+{
+  "photos": [
+    {
+      "id": "p1",
+      "url": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200",
+      "title": "Velvet Silence",
+      "category": "Portrait",
+      "description": "Shadow play on silk.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "p2",
+      "url": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1200",
+      "title": "The Architect",
+      "category": "Portrait",
+      "description": "Lines of character.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "editorial"
+    },
+    {
+      "id": "w1",
+      "url": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1200",
+      "title": "Eternal Gold",
+      "category": "Pre-wed",
+      "description": "Sunset vows.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "wide"
+    },
+    {
+      "id": "gs39rww7m",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905458462-DSC06911.jpg",
+      "title": "The Sacred Bloom",
+      "category": "Portrait",
+      "description": "A quiet moment of grace, where life hums softly beneath a tender touch against a backdrop of lavender dreams.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "yk47xgtw9",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905465730-POT04108.jpg",
+      "title": "Sacred Radiance",
+      "category": "Portrait",
+      "description": "Adorned in silken blues and shimmering gold, she stands amidst nature's embrace, her gentle touch a testament to the miracle of life unfolding in a symphony of grace.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "pczyw01r5",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905472190-POT04120.jpg",
+      "title": "The Secret Bloom",
+      "category": "Portrait",
+      "description": "A silent promise of life held in a gaze, draped in vibrant silk and the golden light of grace.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "bstdqo56e",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905479695-POT04201.jpg",
+      "title": "Eternal Bloom",
+      "category": "Portrait",
+      "description": "A tapestry of joy woven in silk and gold, where two souls embrace the soft whispers of a new tomorrow.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "uea6gsche",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905490622-POT04508.jpg",
+      "title": "The New Journey",
+      "category": "Portrait",
+      "description": "In the gentle cradle of their hands, tiny blue shoes whisper of the beautiful journey soon to begin.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "dw42d2kjg",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905498240-POT04525.jpg",
+      "title": "Radiant Expectancy",
+      "category": "Portrait",
+      "description": "A gentle touch, a shared gaze, and the silent rhythm of a life yet to be, wrapped in the vibrant hues of tradition and the timeless grace of love.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "16umkqpft",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905546136-POT04641.jpg",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "1htuaxtrn",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905555163-POT04696.jpg",
+      "title": "Sacred Promise",
+      "category": "Portrait",
+      "description": "A silent symphony of shadows and light, cradling the whispered promise of a new dawn.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "apv0d9sbc",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905562382-POT04732.jpg",
+      "title": "Glow of Genesis",
+      "category": "Portrait",
+      "description": "A radiant symphony of anticipation, where the soft curve of life meets the golden light of a mother's joyous heart.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "ok0686uct",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905565223-POT04743.jpg",
+      "title": "Untitled Composition",
+      "category": "General",
+      "description": "Captured light and shadow.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "nfw45ktxp",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905568340-POT04744.jpg",
+      "title": "Untitled Composition",
+      "category": "General",
+      "description": "Captured light and shadow.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "p1vwmy8w7",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905570785-POT04771.jpg",
+      "title": "Untitled Composition",
+      "category": "General",
+      "description": "Captured light and shadow.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "3v0sai0wi",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905573776-POT04788.jpg",
+      "title": "Untitled Composition",
+      "category": "General",
+      "description": "Captured light and shadow.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "14y52irkm",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905576739-POT04836.jpg",
+      "title": "Untitled Composition",
+      "category": "General",
+      "description": "Captured light and shadow.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "ki8gmkd3i",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905579700-POT04846.jpg",
+      "title": "Untitled Composition",
+      "category": "General",
+      "description": "Captured light and shadow.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "jxt48uz05",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905582249-POT04868.jpg",
+      "title": "Untitled Composition",
+      "category": "General",
+      "description": "Captured light and shadow.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    },
+    {
+      "id": "c2mqiuuc8",
+      "url": "https://raw.githubusercontent.com/ThejeshBommisetty/LumierePortfolio/main/assets/gallery/1768905585021-POT04901.jpg",
+      "title": "Untitled Composition",
+      "category": "General",
+      "description": "Captured light and shadow.",
+      "isPublished": true,
+      "isCategoryHero": false,
+      "layoutType": "classic"
+    }
+  ],
+  "homeHeroes": [
+    {
+      "id": "h1",
+      "url": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200",
+      "title": "Human Stories",
+      "category": "Portrait",
+      "description": "Enter the Portrait Archive",
+      "isPublished": true,
+      "isCategoryHero": true,
+      "layoutType": "editorial"
+    }
+  ]
+}
