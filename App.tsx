@@ -12,28 +12,27 @@ const HERO_STORAGE_KEY = 'potraits_plaza_v7_heroes';
 
 const App: React.FC = () => {
   const [view, setView] = useState<ViewMode>(ViewMode.SHOWCASE);
+  const [hasError, setHasError] = useState(false);
   
   const [photos, setPhotos] = useState<Photo[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) return JSON.parse(saved);
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (e) { console.error(e); }
     return [
       { id: 'p1', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200', title: 'Velvet Silence', category: 'Portrait', description: 'Shadow play on silk.', isPublished: true, isCategoryHero: false, layoutType: 'classic' },
       { id: 'p2', url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1200', title: 'The Architect', category: 'Portrait', description: 'Lines of character.', isPublished: true, isCategoryHero: false, layoutType: 'editorial' },
-      { id: 'w1', url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1200', title: 'Eternal Gold', category: 'Pre-wed', description: 'Sunset vows.', isPublished: true, isCategoryHero: false, layoutType: 'wide' },
-      { id: 'k1', url: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?q=80&w=1200', title: 'First Wonder', category: 'Kids', description: 'Eyes wide with life.', isPublished: true, isCategoryHero: false, layoutType: 'classic' },
-      { id: 'pr1', url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1200', title: 'Minimal Chrono', category: 'Product', description: 'Time in stillness.', isPublished: true, isCategoryHero: false, layoutType: 'classic' },
-      { id: 'l1', url: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=1200', title: 'Alpine Peak', category: 'Landscape', description: 'Frozen eternity.', isPublished: true, isCategoryHero: false, layoutType: 'wide' },
-      { id: 's1', url: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=1200', title: 'City Pulse', category: 'Street', description: 'Urban geometry.', isPublished: true, isCategoryHero: false, layoutType: 'editorial' }
+      { id: 'w1', url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1200', title: 'Eternal Gold', category: 'Pre-wed', description: 'Sunset vows.', isPublished: true, isCategoryHero: false, layoutType: 'wide' }
     ];
   });
 
   const [homeHeroes, setHomeHeroes] = useState<Photo[]>(() => {
-    const saved = localStorage.getItem(HERO_STORAGE_KEY);
-    if (saved) return JSON.parse(saved);
+    try {
+      const saved = localStorage.getItem(HERO_STORAGE_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (e) { console.error(e); }
     return [
-      { id: 'h1', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200', title: 'Human Stories', category: 'Portrait', description: 'Enter the Portrait Archive', isPublished: true, isCategoryHero: true, layoutType: 'editorial' },
-      { id: 'h2', url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1200', title: 'Sacred Vows', category: 'Pre-wed', description: 'The Wedding Archives', isPublished: true, isCategoryHero: true, layoutType: 'wide' },
-      { id: 'h3', url: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=1200', title: 'Earth & Sky', category: 'Landscape', description: 'Nature’s quiet drama', isPublished: true, isCategoryHero: true, layoutType: 'editorial' }
+      { id: 'h1', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200', title: 'Human Stories', category: 'Portrait', description: 'Enter the Portrait Archive', isPublished: true, isCategoryHero: true, layoutType: 'editorial' }
     ];
   });
 
@@ -51,9 +50,13 @@ const App: React.FC = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `portraits-plaza-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `portraits-plaza-backup.json`;
     a.click();
   };
+
+  if (hasError) {
+    return <div className="p-20 text-center font-serif">Something went wrong. Please refresh.</div>;
+  }
 
   const renderContent = () => {
     switch (view) {

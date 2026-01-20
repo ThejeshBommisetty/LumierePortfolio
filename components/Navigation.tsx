@@ -14,7 +14,7 @@ const Navigation: React.FC<NavigationProps> = ({ view, setView }) => {
     { mode: ViewMode.CONTACT, label: 'Connect' }
   ];
 
-  // Pointing to your requested local directory
+  // Path to your local logo file in the assets folder
   const LOGO_SRC = "/assets/logo/logo.png";
 
   return (
@@ -24,20 +24,21 @@ const Navigation: React.FC<NavigationProps> = ({ view, setView }) => {
           onClick={() => setView(ViewMode.SHOWCASE)}
           className="flex items-center gap-4 group"
         >
-          <div className="h-10 w-16 flex items-center justify-center transition-all group-hover:scale-110 duration-500">
+          <div className="h-10 w-16 flex items-center justify-center transition-all group-hover:scale-110 duration-500 overflow-hidden">
             <img 
               src={LOGO_SRC} 
-              alt="Portraits Plaza Logo" 
+              alt="Brand Logo" 
               className="h-full w-full object-contain"
               onError={(e) => {
-                // Fallback icon if the file isn't uploaded yet
-                (e.target as HTMLImageElement).src = "https://cdn-icons-png.flaticon.com/512/685/685655.png";
-                (e.target as HTMLImageElement).className = "h-full w-full object-contain opacity-20 grayscale";
+                // Shows a camera icon placeholder if the logo file isn't found
+                const target = e.target as HTMLImageElement;
+                target.src = "https://cdn-icons-png.flaticon.com/512/685/685655.png";
+                target.className = "h-8 w-8 object-contain opacity-20 grayscale";
               }}
             />
           </div>
           <div className="flex flex-col items-start leading-none border-l border-neutral-100 pl-4">
-            <span className="text-lg font-serif font-bold tracking-[0.1em] uppercase">Potraits Plaza</span>
+            <span className="text-lg font-serif font-bold tracking-[0.1em] uppercase text-neutral-900">Potraits Plaza</span>
             <span className="text-[7px] tracking-[0.5em] uppercase text-amber-600 font-bold mt-1">By Thejesh Bommisetty</span>
           </div>
         </button>

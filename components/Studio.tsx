@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { Photo, LayoutType } from '../types';
+import React, { useState, useEffect } from 'react';
+import { Photo } from '../types';
 import { analyzePhoto } from '../services/geminiService';
 
 interface StudioProps {
@@ -17,14 +17,8 @@ const Studio: React.FC<StudioProps> = ({ photos, onPhotosChange, homeHeroes, onH
   const [activeTab, setActiveTab] = useState<'gallery' | 'heroes'>('gallery');
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState({ current: 0, total: 0 });
-  const [isSortMode, setIsSortMode] = useState(false);
 
   const LOGO_SRC = "/assets/logo/logo.png";
-
-  const [ghToken, setGhToken] = useState(() => sessionStorage.getItem('gh_token') || '');
-  const [ghRepo, setGhRepo] = useState(() => sessionStorage.getItem('gh_repo') || ''); 
-  const [ghPath, setGhPath] = useState(() => sessionStorage.getItem('gh_path') || 'assets/gallery');
-
   const OWNER_PASSCODE = '1234';
 
   useEffect(() => {
@@ -89,30 +83,31 @@ const Studio: React.FC<StudioProps> = ({ photos, onPhotosChange, homeHeroes, onH
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-900 px-6">
+      <div className="min-h-screen flex items-center justify-center bg-neutral-950 px-6">
         <div className="max-w-sm w-full bg-black p-12 border border-white/5 shadow-2xl rounded-sm flex flex-col items-center">
-          <div className="w-24 h-24 mb-8">
+          <div className="w-20 h-20 mb-10 overflow-hidden flex items-center justify-center">
              <img 
                src={LOGO_SRC} 
-               className="w-full h-full object-contain" 
+               className="w-full h-full object-contain brightness-200" 
                alt="Studio Logo"
                onError={(e) => {
-                 (e.target as HTMLImageElement).src = "https://cdn-icons-png.flaticon.com/512/685/685655.png";
-                 (e.target as HTMLImageElement).className = "w-full h-full object-contain invert opacity-20";
+                 const target = e.target as HTMLImageElement;
+                 target.src = "https://cdn-icons-png.flaticon.com/512/685/685655.png";
+                 target.className = "w-12 h-12 object-contain invert opacity-10";
                }}
              />
           </div>
-          <h2 className="font-serif text-3xl mb-10 text-center uppercase tracking-tighter text-white">Studio Vault</h2>
-          <form onSubmit={handleLogin} className="w-full space-y-6">
+          <h2 className="font-serif text-3xl mb-12 text-center uppercase tracking-[0.2em] text-white">Studio</h2>
+          <form onSubmit={handleLogin} className="w-full space-y-8">
             <input 
               type="password" 
               value={passcode} 
               onChange={e => setPasscode(e.target.value)} 
-              placeholder="PASSCODE" 
-              className="w-full bg-white/5 border border-white/10 p-6 text-center tracking-[0.8em] focus:outline-none focus:border-amber-600 text-white" 
+              placeholder="••••" 
+              className="w-full bg-white/5 border border-white/10 p-6 text-center tracking-[1em] focus:outline-none focus:border-amber-600 text-white font-bold" 
               autoFocus 
             />
-            <button className="w-full bg-amber-600 text-white py-5 text-[10px] uppercase tracking-widest font-bold hover:bg-amber-700 transition-colors">Open Studio</button>
+            <button className="w-full bg-amber-600 text-white py-5 text-[10px] uppercase tracking-widest font-bold hover:bg-amber-700 transition-colors">Access Archive</button>
           </form>
         </div>
       </div>
@@ -123,49 +118,75 @@ const Studio: React.FC<StudioProps> = ({ photos, onPhotosChange, homeHeroes, onH
     <div className="max-w-7xl mx-auto px-6 pt-40 pb-32">
       <div className="flex flex-col lg:flex-row justify-between items-end gap-12 border-b border-neutral-100 pb-16 mb-12">
         <div>
-          <h2 className="font-serif text-5xl mb-4 text-neutral-900">The Studio</h2>
-          <p className="text-neutral-400 text-[10px] tracking-[0.6em] uppercase">
-            {isUploading ? `Uploading ${uploadProgress.current}/${uploadProgress.total}...` : 'Archive Management'}
+          <h2 className="font-serif text-5xl mb-4 text-neutral-900 tracking-tighter">Studio Management</h2>
+          <p className="text-neutral-400 text-[10px] tracking-[0.6em] uppercase font-bold">
+            {isUploading ? `Processing ${uploadProgress.current}/${uploadProgress.total}...` : 'Curate your vision'}
           </p>
         </div>
         <div className="flex flex-wrap gap-4 justify-end">
-          <button onClick={onExport} className="bg-neutral-100 text-neutral-600 px-8 py-4 text-[9px] uppercase tracking-widest font-bold border border-neutral-200 hover:bg-neutral-200">Export JSON</button>
+          <button onClick={onExport} className="bg-neutral-100 text-neutral-600 px-8 py-4 text-[9px] uppercase tracking-widest font-bold border border-neutral-200 hover:bg-neutral-200">Download Backup</button>
           <label className="cursor-pointer bg-black text-white px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-center hover:bg-neutral-800 transition-all">
-            {isUploading ? 'Working...' : `Add to ${activeTab === 'gallery' ? 'Archive' : 'Home Heroes'}`}
+            {isUploading ? 'Working...' : `Upload to ${activeTab === 'gallery' ? 'Gallery' : 'Hero Slider'}`}
             <input type="file" multiple accept="image/*" className="hidden" onChange={handleUpload} disabled={isUploading} />
           </label>
         </div>
       </div>
 
       <div className="flex gap-10 mb-12 border-b border-neutral-100">
-        <button onClick={() => setActiveTab('gallery')} className={`pb-4 text-[10px] uppercase tracking-[0.4em] font-bold relative ${activeTab === 'gallery' ? 'text-black' : 'text-neutral-300'}`}>
-          Archives ({photos.length})
+        <button onClick={() => setActiveTab('gallery')} className={`pb-4 text-[10px] uppercase tracking-[0.4em] font-bold relative transition-colors ${activeTab === 'gallery' ? 'text-black' : 'text-neutral-300 hover:text-neutral-500'}`}>
+          Full Archive ({photos.length})
           {activeTab === 'gallery' && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-amber-600"></span>}
         </button>
-        <button onClick={() => setActiveTab('heroes')} className={`pb-4 text-[10px] uppercase tracking-[0.4em] font-bold relative ${activeTab === 'heroes' ? 'text-black' : 'text-neutral-300'}`}>
-          Home Heroes ({homeHeroes.length})
+        <button onClick={() => setActiveTab('heroes')} className={`pb-4 text-[10px] uppercase tracking-[0.4em] font-bold relative transition-colors ${activeTab === 'heroes' ? 'text-black' : 'text-neutral-300 hover:text-neutral-500'}`}>
+          Showcase Heroes ({homeHeroes.length})
           {activeTab === 'heroes' && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-amber-600"></span>}
         </button>
       </div>
 
       <div className="space-y-4 mb-20">
-        {(activeTab === 'gallery' ? photos : homeHeroes).map(p => (
-           <div key={p.id} className="bg-white border border-neutral-100 p-6 flex flex-wrap items-center gap-6 group hover:border-black transition-all">
-            <img src={p.url} className="w-20 h-20 object-cover bg-neutral-50" />
-            <div className="flex-grow">
-              <span className="text-[9px] uppercase font-bold text-amber-600 tracking-widest">{p.category}</span>
-              <h4 className="font-serif text-xl text-neutral-900">{p.title}</h4>
+        {(activeTab === 'gallery' ? photos : homeHeroes).map((p, idx) => (
+           <div key={p.id} className="bg-white border border-neutral-100 p-6 flex flex-wrap items-center gap-8 group hover:border-amber-600/30 transition-all duration-500">
+            <div className="w-24 h-24 overflow-hidden rounded-sm bg-neutral-50 flex-shrink-0">
+               <img src={p.url} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
             </div>
-            <div className="flex items-center gap-4">
-              <button onClick={() => moveItem(p.id, 'up', (activeTab === 'gallery' ? photos : homeHeroes), (activeTab === 'gallery' ? onPhotosChange : onHomeHeroesChange))} className="p-2 hover:bg-neutral-100 rounded">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="18 15 12 9 6 15"/></svg>
-              </button>
-              <button onClick={() => (activeTab === 'gallery' ? onPhotosChange(photos.filter(x => x.id !== p.id)) : onHomeHeroesChange(homeHeroes.filter(x => x.id !== p.id)))} className="text-neutral-300 hover:text-red-500">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+            <div className="flex-grow">
+              <div className="flex items-center gap-3 mb-1">
+                <span className="text-[8px] uppercase font-bold text-amber-600 tracking-widest px-2 py-0.5 bg-amber-50 rounded-sm">{p.category}</span>
+                <span className="text-[8px] uppercase font-bold text-neutral-300 tracking-widest">#{idx + 1}</span>
+              </div>
+              <h4 className="font-serif text-2xl text-neutral-900 mb-1">{p.title}</h4>
+              <p className="text-[11px] text-neutral-400 font-light italic truncate max-w-md">{p.description}</p>
+            </div>
+            <div className="flex items-center gap-4 border-l border-neutral-100 pl-8">
+              <div className="flex flex-col gap-2">
+                <button onClick={() => moveItem(p.id, 'up', (activeTab === 'gallery' ? photos : homeHeroes), (activeTab === 'gallery' ? onPhotosChange : onHomeHeroesChange))} className="p-2 hover:bg-neutral-50 text-neutral-400 hover:text-black transition-colors">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="18 15 12 9 6 15"/></svg>
+                </button>
+                <button onClick={() => moveItem(p.id, 'down', (activeTab === 'gallery' ? photos : homeHeroes), (activeTab === 'gallery' ? onPhotosChange : onHomeHeroesChange))} className="p-2 hover:bg-neutral-50 text-neutral-400 hover:text-black transition-colors">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+              </div>
+              <button 
+                onClick={() => {
+                  const confirmed = confirm(`Are you sure you want to remove "${p.title}"?`);
+                  if (confirmed) {
+                    activeTab === 'gallery' 
+                      ? onPhotosChange(photos.filter(x => x.id !== p.id)) 
+                      : onHomeHeroesChange(homeHeroes.filter(x => x.id !== p.id));
+                  }
+                }} 
+                className="p-4 text-neutral-200 hover:text-red-500 hover:bg-red-50 transition-all rounded-sm ml-4"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
               </button>
             </div>
           </div>
         ))}
+        {(activeTab === 'gallery' ? photos : homeHeroes).length === 0 && (
+          <div className="py-32 text-center border-2 border-dashed border-neutral-100 rounded-sm">
+            <p className="text-neutral-300 text-[10px] uppercase tracking-[0.5em] font-bold">No assets found in this collection</p>
+          </div>
+        )}
       </div>
     </div>
   );

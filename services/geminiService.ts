@@ -3,20 +3,21 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { AIAnalysisResult } from "../types";
 
 export const analyzePhoto = async (base64Image: string): Promise<AIAnalysisResult> => {
-  const apiKey = process.env.API_KEY;
+  // In Netlify/Browser environments without a bundler, process.env might be undefined.
+  // We use a safe check to prevent the app from crashing.
+  const apiKey = (typeof process !== 'undefined' && process.env?.API_KEY) || "";
   
   if (!apiKey) {
-    console.error("Gemini API Key is missing. Please set API_KEY in your environment variables.");
+    console.warn("Gemini API Key is missing. AI features will be disabled.");
     return {
       title: "Untitled Composition",
       category: "Uncategorized",
-      description: "Please configure the API key to enable AI descriptions."
+      description: "AI analysis is currently unavailable (API Key not found)."
     };
   }
 
-  const ai = new GoogleGenAI({ apiKey });
-  
   try {
+    const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: {
