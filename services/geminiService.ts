@@ -3,19 +3,22 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { AIAnalysisResult } from "../types";
 
 /**
- * Safely retrieves the API Key without crashing the browser.
- * In Netlify/ESM environments, process.env is not globally available.
+ * Robust API key retrieval for browser environments.
  */
 const getSafeApiKey = (): string => {
   try {
-    // Attempt to check if process exists, otherwise return empty
+    // We use a string check for 'process' to avoid ReferenceErrors in strict environments
+    if (typeof window !== 'undefined' && (window as any).process?.env?.API_KEY) {
+      return (window as any).process.env.API_KEY;
+    }
+    // Fallback for typical build-time injection or environment variable patterns
     // @ts-ignore
-    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+    if (typeof process !== 'undefined' && process.env?.API_KEY) {
       // @ts-ignore
       return process.env.API_KEY;
     }
   } catch (e) {
-    // Silent catch
+    // Ignore errors in detection
   }
   return "";
 };
@@ -24,7 +27,7 @@ export const analyzePhoto = async (base64Image: string): Promise<AIAnalysisResul
   const apiKey = getSafeApiKey();
 
   if (!apiKey) {
-    console.warn("Gemini API Key is missing. AI features will use fallback metadata.");
+    console.warn("Gemini API Key is missing. Using fallback metadata.");
     return {
       title: "New Capture",
       category: "Archive",
