@@ -3,16 +3,23 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { AIAnalysisResult } from "../types";
 
 export const analyzePhoto = async (base64Image: string): Promise<AIAnalysisResult> => {
-  // In Netlify/Browser environments without a bundler, process.env might be undefined.
-  // We use a safe check to prevent the app from crashing.
-  const apiKey = (typeof process !== 'undefined' && process.env?.API_KEY) || "";
-  
+  // In a browser environment without a bundler, we must safely check for process.env
+  // Netlify provides these via a special injection or we fall back to an empty string
+  let apiKey = "";
+  try {
+    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+      apiKey = process.env.API_KEY;
+    }
+  } catch (e) {
+    console.warn("Could not access process.env.API_KEY directly.");
+  }
+
   if (!apiKey) {
-    console.warn("Gemini API Key is missing. AI features will be disabled.");
+    console.warn("Gemini API Key is missing. AI features will use fallback metadata.");
     return {
-      title: "Untitled Composition",
-      category: "Uncategorized",
-      description: "AI analysis is currently unavailable (API Key not found)."
+      title: "New Capture",
+      category: "Archive",
+      description: "A moment preserved in the gallery."
     };
   }
 
@@ -47,13 +54,14 @@ export const analyzePhoto = async (base64Image: string): Promise<AIAnalysisResul
       },
     });
 
-    return JSON.parse(response.text || '{}') as AIAnalysisResult;
+    const text = response.text;
+    return JSON.parse(text || '{}') as AIAnalysisResult;
   } catch (e) {
     console.error("AI Analysis failed:", e);
     return {
       title: "Untitled Composition",
-      category: "Uncategorized",
-      description: "A moment captured in light."
+      category: "General",
+      description: "Captured light and shadow."
     };
   }
 };
