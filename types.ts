@@ -8,9 +8,8 @@ export interface Photo {
   category: string;
   description?: string;
   isPublished: boolean;
-  isCategoryHero: boolean; // Controls if this photo represents the category in Overview
+  isCategoryHero: boolean;
   layoutType: LayoutType;
-  aspectRatio?: number;
 }
 
 export enum ViewMode {
